@@ -1,0 +1,11 @@
+# Apps Script files stay local — they contain the response-sheet ID and the
+# form's edit URL, which should not be published.
+*.gs
+
+# OS noise
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Vercel
+.vercel

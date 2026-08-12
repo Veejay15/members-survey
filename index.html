@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Could You Be Claire? — A Reader Quiz</title>
+<meta name="description" content="An 18+ reader quiz for readers of the story.">
+<style>
+/* ============================================================
+   PALETTE — dark & moody romance
+   ============================================================ */
+:root{
+  --ink:        #100c0c;   /* page background        */
+  --ink-2:      #1a1414;   /* card background        */
+  --ink-3:      #241b1c;   /* option row background  */
+  --wine:       #5c1526;   /* deep wine              */
+  --wine-lift:  #7d1f33;   /* wine, hover            */
+  --gold:       #c9a86a;   /* accent                 */
+  --gold-soft:  #e0c48d;
+  --alert:      #e0745f;   /* "read this one first"  */
+  --cream:      #f4e9df;   /* primary text           */
+  --muted:      #a3908a;   /* secondary text         */
+  --line:       #372a2a;   /* hairlines              */
+  --serif:      "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  --sans:       ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+
+html,body{ margin:0; padding:0; }
+
+html{
+  background: var(--ink);
+  overflow-x: hidden;                    /* nothing may scroll sideways   */
+  -webkit-text-size-adjust: 100%;        /* stop iOS inflating text       */
+  text-size-adjust: 100%;
+}
+
+body{
+  background: transparent;
+  color: var(--cream);
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: rgba(201,168,106,.15);
+  overflow-x: hidden;
+  min-height: 100svh;
+}
+
+/* The wine bloom sits on its own fixed layer. background-attachment:fixed
+   is janky and often ignored on iOS Safari, so this does it properly. */
+body::before{
+  content:"";
+  position: fixed; inset: 0; z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(60rem 40rem at 12% -10%, rgba(92,21,38,.55), transparent 60%),
+    radial-gradient(50rem 36rem at 105% 108%, rgba(92,21,38,.35), transparent 62%);
+}
+
+.wrap{
+  width: 100%;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+
+/* ---------- type ---------- */
+h1,h2,h3{ font-weight:400; line-height:1.2; margin:0; letter-spacing:.01em; }
+h1{ font-size: clamp(2rem, 7vw, 2.9rem); }
+h2{ font-size: clamp(1.35rem, 4.6vw, 1.7rem); }
+p{ margin: 0 0 1rem; }
+.lede{ color: var(--muted); font-size: 1.05rem; }
+.small{ font-size: .85rem; line-height:1.55; color: var(--muted); }
+em{ color: var(--gold-soft); font-style: italic; }
+
+.eyebrow{
+  font-family: var(--sans);
+  font-size: .68rem;
+  font-weight: 600;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 1rem;
+}
+
+.rule{
+  height:1px; border:0; margin: 2rem 0;
+  background: linear-gradient(90deg, transparent, var(--line) 22%, var(--line) 78%, transparent);
+}
+
+/* a small gold diamond divider */
+.ornament{
+  display:flex; align-items:center; gap:.75rem;
+  color: var(--line); margin: 1.75rem 0;
+}
+.ornament::before,.ornament::after{ content:""; flex:1; height:1px; background:var(--line); }
+.ornament span{ color: var(--gold); font-size:.7rem; letter-spacing:.3em; }
+
+/* ---------- cards ---------- */
+.card{
+  background: var(--ink-2);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1.75rem 1.5rem;
+  box-shadow: 0 18px 50px -22px rgba(0,0,0,.9);
+}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+  font-family: var(--sans); font-size: .9rem; font-weight:600;
+  letter-spacing:.06em; text-transform:uppercase;
+  padding: .95rem 1.6rem;
+  border-radius: 999px;
+  border:1px solid transparent;
+  cursor:pointer;
+  text-decoration:none;
+  white-space: nowrap;                 /* never let a label break in two */
+  min-height: 3rem;                    /* comfortable thumb target       */
+  transition: background .18s ease, border-color .18s ease, color .18s ease, transform .12s ease;
+}
+.btn:active{ transform: translateY(1px); }
+.btn-primary{ background: var(--wine); color: var(--cream); border-color: var(--wine-lift); }
+.btn-gold{ background: var(--gold); color: #1a1414; }
+.btn-ghost{ background: transparent; color: var(--muted); border-color: var(--line); }
+.btn-block{ display:flex; width:100%; }
+.btn:disabled{ opacity:.4; cursor:not-allowed; }
+
+/* Hover effects only where there is a real pointer. On a phone these
+   otherwise "stick" after a tap and look like a stuck selection. */
+@media (hover:hover){
+  .btn-primary:hover{ background: var(--wine-lift); }
+  .btn-gold:hover{ background: var(--gold-soft); }
+  .btn-ghost:hover{ color: var(--cream); border-color: var(--muted); }
+}
+
+/* ---------- age gate ---------- */
+#gate{
+  position: fixed; inset: 0; z-index: 100;
+  background: var(--ink);
+  background-image: radial-gradient(50rem 34rem at 50% 0%, rgba(92,21,38,.6), transparent 65%);
+  display:flex; align-items:flex-start; justify-content:center;
+  padding: 1.25rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+/* margin:auto rather than align-items:center — a centred flex child taller
+   than the screen gets its top clipped with no way to scroll to it
+   (happens on a phone held sideways). */
+#gate .card{ max-width: 27rem; text-align:center; margin: auto; }
+.gate-actions{ display:grid; gap:.6rem; margin-top: 1.5rem; }
+
+.warn{
+  border-left: 2px solid var(--gold);
+  padding: .1rem 0 .1rem .9rem;
+  margin: 1.25rem 0;
+  text-align: left;
+}
+
+/* ---------- progress ---------- */
+.progress-head{
+  display:flex; justify-content:space-between; align-items:baseline;
+  font-family: var(--sans); font-size:.72rem; letter-spacing:.16em;
+  text-transform:uppercase; color: var(--muted);
+  margin-bottom:.55rem;
+}
+.track{ height:2px; background: var(--line); border-radius:2px; overflow:hidden; }
+.bar{
+  height:100%; width:0%;
+  background: linear-gradient(90deg, var(--wine-lift), var(--gold));
+  transition: width .35s cubic-bezier(.22,.61,.36,1);
+}
+
+/* ---------- question ---------- */
+.qwrap{ margin-top: 2rem; }
+.qnum{
+  font-family: var(--sans); font-size:.7rem; letter-spacing:.2em;
+  text-transform:uppercase; color: var(--gold); margin-bottom:.7rem;
+}
+.qtitle{ font-size: clamp(1.3rem, 5vw, 1.6rem); margin-bottom: 1.5rem; }
+
+.opts{ display:grid; gap:.55rem; }
+.opt{
+  display:flex; align-items:flex-start; gap:.85rem;
+  width:100%; text-align:left;
+  background: var(--ink-3);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding: .95rem 1.05rem;
+  color: var(--cream);
+  font-family: var(--serif); font-size: 1rem; line-height:1.45;
+  cursor:pointer;
+  transition: border-color .15s ease, background .15s ease, transform .1s ease;
+}
+.opt:active{ transform: scale(.995); }
+.opt.sel{ border-color: var(--gold); background:#33242a; }
+@media (hover:hover){
+  .opt:hover{ border-color: var(--gold); background:#2b2021; }
+  .opt:hover .key{ border-color: var(--gold); color: var(--gold); }
+}
+.opt .key{
+  flex:none;
+  width:1.55rem; height:1.55rem; margin-top:.05rem;
+  border:1px solid var(--line); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family: var(--sans); font-size:.7rem; font-weight:700;
+  color: var(--muted);
+  transition: all .15s ease;
+}
+.opt.sel .key{ background: var(--gold); border-color: var(--gold); color:#1a1414; }
+
+.nav{
+  display:flex; flex-wrap:wrap;
+  justify-content:space-between; align-items:center;
+  gap:.75rem 1rem; margin-top:1.75rem;
+}
+.nav .small{ flex:1 1 8rem; text-align:right; }
+
+/* ---------- result ---------- */
+.score-ring{
+  width: 9.5rem; height: 9.5rem;
+  margin: 0 auto 1.5rem;
+  position: relative;
+}
+.score-ring svg{ transform: rotate(-90deg); display:block; }
+.score-ring .val{
+  position:absolute; inset:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+}
+.score-ring .pct{ font-size: 2.3rem; line-height:1; color: var(--gold-soft); }
+.score-ring .raw{
+  font-family: var(--sans); font-size:.62rem; letter-spacing:.16em;
+  text-transform:uppercase; color: var(--muted); margin-top:.4rem;
+}
+
+.tier-name{
+  font-size: clamp(1.7rem, 6vw, 2.2rem);
+  color: var(--gold-soft);
+  text-align:center;
+  margin-bottom: 1rem;
+}
+.tier-body{ text-align:center; color: var(--cream); }
+.result-actions{ display:grid; gap:.6rem; margin-top: 2rem; }
+
+.verdict{
+  text-align:center;
+  font-size: 1.1rem;
+  color: var(--gold);
+  margin: -.4rem 0 1.4rem;
+}
+
+.sub-head{
+  font-family: var(--sans);
+  font-size:.7rem; font-weight:600;
+  letter-spacing:.22em; text-transform:uppercase;
+  color: var(--gold);
+  text-align:center;
+  margin-bottom: 1.5rem;
+}
+
+/* ---------- next steps ---------- */
+.tips{ list-style:none; counter-reset:tip; padding:0; margin:0; display:grid; gap:.75rem; }
+.tips li{
+  counter-increment: tip;
+  position:relative;
+  background: var(--ink-2);
+  border:1px solid var(--line);
+  border-left:2px solid var(--gold);
+  border-radius:10px;
+  padding: 1rem 1.15rem 1rem 3.25rem;
+  font-size:.97rem; line-height:1.55;
+  color: var(--muted);
+}
+.tips li::before{
+  content: counter(tip);
+  position:absolute; left:1.2rem; top:1.05rem;
+  font-family: var(--sans); font-size:.75rem; font-weight:700;
+  color: var(--gold);
+}
+.tips li strong{
+  display:block; font-weight:400;
+  color: var(--cream); font-size:1.02rem;
+  margin-bottom:.3rem;
+}
+.tips li.priority{ border-left-color: var(--alert); background:#251a18; }
+.tips li.priority::before{ color: var(--alert); }
+.tips li.priority strong{ color: var(--gold-soft); }
+
+
+.toast{
+  position: fixed; left:50%; bottom: 1.5rem; transform: translate(-50%, 1.5rem);
+  background: var(--gold); color:#1a1414;
+  font-family: var(--sans); font-size:.8rem; font-weight:600;
+  line-height:1.4; text-align:center;
+  max-width: calc(100vw - 2.5rem);      /* long share text must not overflow */
+  padding:.65rem 1.15rem; border-radius:18px;
+  opacity:0; pointer-events:none;
+  transition: opacity .25s ease, transform .25s ease;
+  z-index: 200;
+}
+.toast.show{ opacity:1; transform: translate(-50%, 0); }
+
+/* ---------- misc ---------- */
+.hidden{ display:none !important; }
+.fade{ animation: fade .35s ease both; }
+@keyframes fade{ from{ opacity:0; transform: translateY(10px);} to{ opacity:1; transform:none; } }
+@media (prefers-reduced-motion: reduce){
+  .fade{ animation:none; } .bar{ transition:none; } .opt,.btn{ transition:none; }
+}
+
+footer{ margin-top: 3rem; text-align:center; }
+footer a{ color: var(--muted); }
+
+/* ============================================================
+   SMALL PHONES  (iPhone SE and anything narrower)
+   Reclaim horizontal space — at 320px the number gutter on the
+   tips was eating a fifth of the readable width.
+   ============================================================ */
+@media (max-width: 380px){
+  body{ font-size:16px; }
+  .wrap{ padding: 1.5rem 1rem 3rem; }
+  .card{ padding: 1.35rem 1.1rem; }
+  .opt{ padding: .9rem .85rem; gap:.7rem; font-size:.97rem; }
+  .opt .key{ width:1.4rem; height:1.4rem; }
+  .tips li{ padding: .9rem 1rem .9rem 2.5rem; }
+  .tips li::before{ left:.95rem; top:.95rem; }
+  .btn{ padding:.9rem 1.1rem; font-size:.82rem; letter-spacing:.04em; }
+  .nav{ margin-top:1.4rem; }
+  .nav .small{ font-size:.8rem; }
+  .progress-head{ font-size:.66rem; letter-spacing:.12em; }
+  .score-ring{ width:8.5rem; height:8.5rem; }
+  .score-ring svg{ width:136px; height:136px; }
+}
+
+/* landscape phones: don't waste the little vertical room there is */
+@media (max-height: 460px) and (orientation: landscape){
+  .wrap{ padding-top:1.25rem; padding-bottom:2rem; }
+  .score-ring{ width:7rem; height:7rem; margin-bottom:1rem; }
+  .score-ring svg{ width:112px; height:112px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     AGE GATE
+     ============================================================ -->
+<div id="gate">
+  <div class="card">
+    <p class="eyebrow">Adults only</p>
+    <h2>This quiz is for readers 18 and over.</h2>
+
+    <div class="warn">
+      <p class="small" style="margin:0">
+        It contains explicit adult themes and asks frank questions about sex,
+        relationships and desire — including your own experiences.
+      </p>
+    </div>
+
+    <p class="small">
+      Your answers are anonymous. No name, no email, no login. Nothing that
+      identifies you is ever asked for or recorded.
+    </p>
+
+    <div class="gate-actions">
+      <button class="btn btn-primary btn-block" id="gateYes">I am 18 or older — enter</button>
+      <button class="btn btn-ghost btn-block" id="gateNo">I am under 18</button>
+    </div>
+  </div>
+</div>
+
+<div id="gateExit" class="hidden" style="position:fixed;inset:0;z-index:101;background:var(--ink);display:flex;align-items:center;justify-content:center;padding:1.25rem">
+  <div class="card" style="max-width:24rem;text-align:center">
+    <h2>Come back another time.</h2>
+    <p class="small" style="margin-top:1rem;margin-bottom:0">
+      This one is for adult readers only. Thank you for being honest.
+    </p>
+  </div>
+</div>
+
+<!-- ============================================================
+     APP
+     ============================================================ -->
+<main class="wrap" id="app" aria-live="polite">
+
+  <!-- ---------- INTRO ---------- -->
+  <section id="intro" class="fade">
+    <p class="eyebrow" id="introEyebrow">A reader quiz</p>
+    <h1 id="introTitle">Could You Be Claire?</h1>
+
+    <div class="ornament"><span>&#10022;</span></div>
+
+    <p class="lede">
+      You have read what Claire chose. Now the harder question — the one the
+      story never asks you directly.
+    </p>
+    <p class="lede">
+      Twenty questions. No right answers. At the end you will find out exactly
+      how close you stand to her, and how much distance is really left between
+      you and Alex.
+    </p>
+
+    <div class="card" style="margin: 2rem 0">
+      <p class="small" style="margin-bottom:.75rem">
+        <strong style="color:var(--cream)">Before you begin</strong>
+      </p>
+      <p class="small" style="margin-bottom:.5rem">&#9656; Completely anonymous. No name, no email, no account.</p>
+      <p class="small" style="margin-bottom:.5rem">&#9656; Nothing is linked to you. I can read the answers, but never who gave them.</p>
+      <p class="small" style="margin-bottom:0">&#9656; Answer honestly or answer as a fantasy. Both are welcome.</p>
+    </div>
+
+    <button class="btn btn-primary btn-block" id="startBtn">Begin the quiz</button>
+  </section>
+
+  <!-- ---------- QUIZ ---------- -->
+  <section id="quiz" class="hidden">
+    <div class="progress-head">
+      <span id="progLabel">Question 1 of 20</span>
+      <span id="progPct">0%</span>
+    </div>
+    <div class="track"><div class="bar" id="bar"></div></div>
+
+    <div class="qwrap" id="qwrap"></div>
+
+    <div class="nav">
+      <button class="btn btn-ghost" id="backBtn">&#8592; Back</button>
+      <span class="small" id="navHint">Tap an answer to continue</span>
+    </div>
+  </section>
+
+  <!-- ---------- RESULT ---------- -->
+  <section id="result" class="hidden">
+    <p class="eyebrow" style="text-align:center">Your result</p>
+
+    <div class="score-ring">
+      <svg width="152" height="152" viewBox="0 0 152 152" aria-hidden="true">
+        <circle cx="76" cy="76" r="68" fill="none" stroke="#372a2a" stroke-width="6"/>
+        <circle id="ringFill" cx="76" cy="76" r="68" fill="none" stroke="#c9a86a"
+                stroke-width="6" stroke-linecap="round"
+                stroke-dasharray="427.3" stroke-dashoffset="427.3"
+                style="transition:stroke-dashoffset 1.1s cubic-bezier(.22,.61,.36,1)"/>
+      </svg>
+      <div class="val">
+        <div class="pct" id="pctOut">0%</div>
+        <div class="raw" id="rawOut">0 / 85</div>
+      </div>
+    </div>
+
+    <h2 class="tier-name" id="tierName"></h2>
+    <p class="verdict" id="verdictLine"></p>
+    <div class="tier-body" id="tierBody"></div>
+
+    <div class="ornament"><span>&#10022;</span></div>
+
+    <p class="sub-head">What to do next</p>
+    <ol class="tips" id="tips"></ol>
+
+    <div class="ornament"><span>&#10022;</span></div>
+
+    <div class="result-actions">
+      <button class="btn btn-gold btn-block" id="shareBtn">Share your result</button>
+      <a class="btn btn-primary btn-block" id="storyBtn" href="#" target="_blank" rel="noopener">Read related stories</a>
+      <button class="btn btn-ghost btn-block" id="retakeBtn">Take it again</button>
+    </div>
+
+    <p class="small" id="saveNote" style="text-align:center;margin-top:1.5rem"></p>
+  </section>
+
+  <footer>
+    <hr class="rule">
+    <p class="small" id="footerNote">18+ only &nbsp;&#183;&nbsp; Anonymous &nbsp;&#183;&nbsp; Nothing you enter identifies you</p>
+  </footer>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<!-- hidden sink for the Google Form POST -->
+<iframe name="gfSink" id="gfSink" style="display:none" title="hidden"></iframe>
+
+<script>
+"use strict";
+
+/* ================================================================
+   ▓▓  CONFIG — EDIT THIS BLOCK, NOTHING ELSE  ▓▓
+   ================================================================ */
+var CONFIG = {
+
+  /* --- your story --- */
+  storyTitle:   "Could You Be Claire?",
+  eyebrow:      "A reader quiz",
+
+  /* The "Read related stories" button at the end of the quiz links here. */
+  relatedUrl:   "https://www.wattpad.com/story/413245226-maria-my-hot-wife%27s-confession",
+
+  /* The story this quiz is about. Used in the text readers share, so it is
+     worth filling in — otherwise they share the placeholder below. */
+  wattpadUrl:   "https://www.wattpad.com/story/YOUR-STORY-ID",
+  shareText:    "I took the Could You Be Claire? quiz for the story. My result:",
+
+  /* --- Google Form (leave formId empty to run the quiz with no data collection) ---
+     Run google-form-setup.gs in Apps Script — it prints this whole block for you. */
+  formId: "1FAIpQLSeF3XiYc6DHRLR9DK_NOFrL9kyrKoVQHS1p9mKhFuukKoxpjw",
+  entries: {
+    q1:  "1083390223",
+    q2:  "1864838158",
+    q3:  "1608256730",
+    q4:  "392430565",
+    q5:  "381350004",
+    q6:  "1562686274",
+    q7:  "1521391894",
+    q8:  "1649842806",
+    q9:  "2022839878",
+    q10: "8253779",
+    q11: "478014135",
+    q12: "1451286941",
+    q13: "1943837620",
+    q14: "722813616",
+    q15: "1906292315",
+    q16: "786831875",
+    q17: "1241393573",
+    q18: "339784403",
+    q19: "449947822",
+    q20: "828788613",
+    score:      "443439793",
+    percent:    "2113774044",
+    foundation: "862234801",
+    desire:     "1686880145",
+    action:     "1593732226",
+    readiness:  "1061786516",
+    tips:       "2052302759"
+  }
+};
+
+/* ================================================================
+   QUESTIONS
+   points:null  =  collected but not scored (no sensible scale)
+   ================================================================ */
+var QUESTIONS = [
+{ id:"q1", title:"How would you describe your current relationship?", options:[
+  {t:"Extremely strong and trusting", p:5},
+  {t:"Very good with occasional issues", p:4},
+  {t:"Average", p:3},
+  {t:"Struggling sometimes", p:2},
+  {t:"Not very stable", p:1}]},
+
+{ id:"q2", title:"Can you talk openly with your partner about sex, jealousy, and boundaries?", options:[
+  {t:"Very easily", p:5},
+  {t:"Usually yes", p:4},
+  {t:"Sometimes", p:3},
+  {t:"Rarely", p:2},
+  {t:"Not at all", p:1}]},
+
+{ id:"q3", title:"Do you both feel secure in your relationship?", options:[
+  {t:"Completely secure", p:5},
+  {t:"Mostly secure", p:4},
+  {t:"Some insecurity sometimes", p:3},
+  {t:"Often insecure", p:2},
+  {t:"Very insecure", p:1}]},
+
+{ id:"q4", title:"Are you comfortable discussing rules or boundaries with other partners?", options:[
+  {t:"Very comfortable", p:5},
+  {t:"Comfortable", p:4},
+  {t:"A little awkward but doable", p:3},
+  {t:"Uncomfortable", p:2},
+  {t:"I would avoid it", p:1}]},
+
+{ id:"q5", title:"When it comes to sexual fantasies, you are:", options:[
+  {t:"Very open-minded and adventurous", p:5},
+  {t:"Curious and willing to explore", p:4},
+  {t:"Somewhat adventurous", p:3},
+  {t:"Mostly traditional", p:2},
+  {t:"Very traditional", p:1}]},
+
+{ id:"q6", title:"Do you enjoy talking about past sexual experiences with your partner?", options:[
+  {t:"Yes, it’s exciting", p:5},
+  {t:"Sometimes", p:4},
+  {t:"Only occasionally", p:3},
+  {t:"It makes me uncomfortable", p:2},
+  {t:"I avoid it completely", p:1}]},
+
+{ id:"q7", title:"When another man flirts with you in front of your partner, you feel:", options:[
+  {t:"Excited", p:5},
+  {t:"Curious", p:4},
+  {t:"Neutral", p:3},
+  {t:"Awkward", p:2},
+  {t:"Uncomfortable", p:1}]},
+
+{ id:"q8", title:"After reading the story — could you be Claire, and give Alex a chance?", options:[
+  {t:"Yes, I want to try it with Alex.", p:5},
+  {t:"I am not sure.", p:3},
+  {t:"I will not consider it.", p:1},
+  {t:"Haven’t thought of it.", p:2}]},
+
+{ id:"q9", title:"What would you do if a very attractive man made a move on you?", options:[
+  {t:"Flirt back playfully", p:5},
+  {t:"Enjoy the attention", p:4},
+  {t:"Politely decline", p:3},
+  {t:"Avoid the situation", p:2},
+  {t:"Immediately shut it down", p:1}]},
+
+{ id:"q10", title:"If your husband gave his permission for you to meet another man, would you take the chance?", options:[
+  {t:"Yes. I want to take a chance on another man.", p:5},
+  {t:"I’m unsure.", p:3},
+  {t:"I need to consult my husband.", p:2},
+  {t:"No, not a chance.", p:1}]},
+
+{ id:"q11", title:"Do you get turned on by the idea of being with someone who isn’t your partner?", options:[
+  {t:"Very much", p:5},
+  {t:"Somewhat", p:4},
+  {t:"Occasionally", p:3},
+  {t:"Rarely", p:2},
+  {t:"Not at all", p:1}]},
+
+{ id:"q12", title:"Would you enjoy your partner watching you with another person?", options:[
+  {t:"Yes, very much", p:5},
+  {t:"Possibly", p:4},
+  {t:"Unsure", p:3},
+  {t:"Probably not", p:2},
+  {t:"Definitely not", p:1}]},
+
+{ id:"q13", title:"Are you comfortable meeting new people or going on dates?", options:[
+  {t:"Very comfortable", p:5},
+  {t:"Comfortable", p:4},
+  {t:"Slightly nervous but open", p:3},
+  {t:"Uncomfortable", p:2},
+  {t:"Very uncomfortable", p:1}]},
+
+{ id:"q14", title:"Have you ever had a one-night stand with someone other than your husband?", options:[
+  {t:"Yes, multiple", p:5},
+  {t:"Yes, once or twice", p:4},
+  {t:"Something similar", p:3},
+  {t:"No, but I considered it", p:2},
+  {t:"Never", p:1}]},
+
+{ id:"q15", title:"Would you consider a one-night stand if you were given the chance?", options:[
+  {t:"Definitely", p:5},
+  {t:"Possibly", p:4},
+  {t:"Maybe", p:3},
+  {t:"Unlikely", p:2},
+  {t:"Never", p:1}]},
+
+/* unscored — the options are not a single scale */
+{ id:"q16", title:"Do you enjoy sex with your husband?", options:[
+  {t:"I love it, but I would like a little extra…", p:null},
+  {t:"We have good sex, but I think it would be even better if I was a hotwife", p:null},
+  {t:"Sometimes", p:null},
+  {t:"The best sex ever.", p:null},
+  {t:"He is awful in bed — that’s why I need to become a hotwife.", p:null}]},
+
+{ id:"q17", title:"Would you have sex with another man?", options:[
+  {t:"I already have!", p:5},
+  {t:"Yes!", p:4},
+  {t:"Maybe if it was the right guy.", p:3},
+  {t:"No, but I considered it.", p:2},
+  {t:"Never", p:1}]},
+
+/* unscored — a preference, not a degree */
+{ id:"q18", title:"What type of man would you want to be shared with?", options:[
+  {t:"I don’t mind, as long as he is hot.", p:null},
+  {t:"Anyone.", p:null},
+  {t:"Someone who is hung.", p:null},
+  {t:"A friend.", p:null},
+  {t:"My ex.", p:null},
+  {t:"No one.", p:null}]},
+
+/* unscored — a preference, not a degree */
+{ id:"q19", title:"If you were Claire, what kind of sex would you want with Alex?", options:[
+  {t:"Protected — with condoms", p:null},
+  {t:"Unprotected — no condoms", p:null},
+  {t:"I’m not sure", p:null},
+  {t:"It would depend on Alex", p:null}]},
+
+{ id:"q20", title:"If you were Claire, would you want a baby with Alex instead of your husband?", options:[
+  {t:"Yes, I am ready", p:5},
+  {t:"No", p:1},
+  {t:"I’m not sure", p:3},
+  {t:"It would depend on Alex", p:3}]}
+];
+
+/* ================================================================
+   THE THREE DIMENSIONS  —  INTERNAL, NOT SHOWN TO THE READER
+   These are not displayed on the result page. They exist so the
+   advice can tell apart two readers with the same total score:
+   one who badly wants this but has a shaky marriage needs the
+   opposite advice from one with a solid marriage who is nervous.
+   They are also sent to your spreadsheet so you can see the split.
+   ================================================================ */
+var DIMENSIONS = [
+{ key:"foundation", label:"Foundation", max:20,
+  qs:["q1","q2","q3","q4"] },                              /* trust, security, talking      */
+
+{ key:"desire", label:"Desire", max:30,
+  qs:["q5","q6","q7","q9","q11","q13"] },                  /* wants it for her own sake     */
+
+{ key:"action", label:"Willingness", max:35,
+  qs:["q8","q10","q12","q14","q15","q17","q20"] }          /* would actually go through     */
+];
+
+/* ================================================================
+   READINESS TIERS  (min = inclusive percentage floor)
+   Each tier carries the sequence of steps for a reader at that level.
+   ================================================================ */
+var TIERS = [
+{ min:85, name:"You Are Claire",
+  verdict:"Ready. The only question left is what order to do things in.",
+  body:"<p>There is barely any difference between you and Claire. Everything she spent "+
+       "the whole story working up the courage to want, you already know about yourself — "+
+       "and you are not embarrassed by any of it.</p>"+
+       "<p>Her nerves were never really the problem. Yours aren’t either. If Alex walked "+
+       "into your evening, the only question would be <em>when</em>.</p>",
+  tips:[
+   {h:"Tell your husband you want to try this.",
+    t:"Pick a quiet night when you are both relaxed. Say it plainly — that you want to be with another man, and you want him to be part of it. Don’t hint, and don’t make it a joke you can take back in the morning. Everything else starts here."},
+   {h:"Agree the rules together, before anyone else is involved.",
+    t:"What are you allowed to do? What is off limits? Does he want to know everything afterwards, or nothing? Will he be there or not? Write it down. And either of you can say stop at any time, without having to explain why."},
+   {h:"Pick a word that means stop.",
+    t:"One word that ends the night straight away — no arguing, no bad feelings afterwards. You will probably never need it. Having it is what makes the rest feel safe."},
+   {h:"Start small.",
+    t:"Go out together and let yourself flirt with someone while he watches. Then go home together, and nothing more. Do that a few times and talk about how it felt each time. You will both learn a lot before anything real happens."},
+   {h:"Then start looking for the other man.",
+    t:"Take your time. Meet him in public first, twice, before anything happens. Let your husband meet him too. A man who doesn’t respect your marriage causes the most problems — and you can usually spot him early."},
+   {h:"Look after each other afterwards.",
+    t:"When the night is over, come back to each other. Save the big conversation for the next day. Almost nothing said at three in the morning comes out right."}] },
+
+{ min:68, name:"Claire, Three Chapters In",
+  verdict:"Almost. You want it — you just haven’t had the conversation yet.",
+  body:"<p>You are not quite where she ended up, but you can see the door from here — "+
+       "and you have looked at it more than once.</p>"+
+       "<p>The trust is there. So is the curiosity. What is missing is the moment that "+
+       "makes it real, and that is exactly where Claire was when the story started.</p>",
+  tips:[
+   {h:"Show him the story first.",
+    t:"Send him a chapter and say “I read this — can I show you?” That is much easier than saying it straight out, and the way he reacts to Claire will tell you a lot before you risk anything."},
+   {h:"Bring it up as a fantasy, not a plan.",
+    t:"Talk about it in bed, as something you thought about. No plan, no question, nothing he has to answer. Then leave it alone for a while. Pushing him now is how you get a no to something he might have said yes to later."},
+   {h:"Work out what you actually want from it.",
+    t:"Is it being wanted by a stranger? Him watching? The secret? Something new? These are different things and they lead in different directions. Knowing which one it is will save you months."},
+   {h:"Decide your limits now, while none of it is real.",
+    t:"Kissing? Staying the night? Someone you already know? The same man more than once? It is much easier to decide these things calmly now than in the moment."},
+   {h:"Don’t rush it.",
+    t:"There is no deadline. The couples who rush this are the ones who spend the next year sorting out the mess."}] },
+
+{ min:50, name:"Curious at the Threshold",
+  verdict:"Curious, but not ready. And there is nothing wrong with staying here.",
+  body:"<p>You are interested, but in no hurry, and not quite sure this one is yours — "+
+       "like a road you have driven past a hundred times without ever turning onto it.</p>"+
+       "<p>You would want the conversation long before the bedroom. Honestly, that is "+
+       "the healthiest place on this whole scale to be standing.</p>",
+  tips:[
+   {h:"Keep it as a fantasy for now.",
+    t:"Talk about it during sex, as a story, with nothing attached to it. A fantasy is allowed to stay a fantasy. Most of them do, and nothing is lost."},
+   {h:"Liking the idea is not the same as wanting it.",
+    t:"Enjoying Claire’s story is not the same as wanting her life. Give yourself a few months to notice which one it is before you decide anything."},
+   {h:"Get good at the hard conversations first.",
+    t:"Couples who handle this well can talk about jealousy and hurt feelings without it turning into a fight. If that is not you two yet, start there. It will help your marriage either way."},
+   {h:"Notice whose idea this really is.",
+    t:"If most of the interest is coming from him and not from you, slow down instead of speeding up. This only works if you want it too."}] },
+
+{ min:32, name:"Reading, Not Living It",
+  verdict:"Not ready, and happy that way.",
+  body:"<p>You came for the story, and that is where you would like it to stay. That is "+
+       "not being shy — it is knowing exactly what belongs in a book and what belongs "+
+       "in your life.</p>"+
+       "<p>You can enjoy every page of what Claire does without wanting any of it for "+
+       "yourself. Most readers are right here with you.</p>",
+  tips:[
+   {h:"You liked the story. You don’t want the life.",
+    t:"That is a complete answer, not half of one — and it is where most readers land."},
+   {h:"A fantasy is allowed to stay a fantasy.",
+    t:"Reading about it, thinking about it, even being turned on by it — none of that means you have to do anything at all."},
+   {h:"If someone pushes you, that is a different problem.",
+    t:"If your partner thinks enjoying this story means yes, that is a conversation about pressure, not about the lifestyle."}] },
+
+{ min:0,  name:"Firmly on the Other Side of the Page",
+  verdict:"Not ready, and not interested. That is a clear answer too.",
+  body:"<p>Claire made a choice you would not make, and you did not have to think very "+
+       "long about it.</p>"+
+       "<p>Which is a compliment to her in its own way — you kept reading anyway. "+
+       "The best stories are often the ones we would never live.</p>",
+  tips:[
+   {h:"This one isn’t for you, and now you know.",
+    t:"You answered honestly. That is worth something — plenty of people work this out much later, and the hard way."},
+   {h:"Keep reading anyway.",
+    t:"You never have to want to live a story to enjoy reading it. The best ones are often the ones we would never choose."},
+   {h:"If someone is pushing you into this, that is the real problem.",
+    t:"Nobody should be talked into it. Saying yes when you mean no is how this goes wrong."}] }
+];
+
+/* ================================================================
+   CONDITIONAL TIPS
+   Triggered by specific answers or by the shape of the three scores,
+   rather than by the total. `priority` ones are shown first.
+   a = answers by index, d = dimension scores.
+   ================================================================ */
+var FLAGS = [
+{ id:"foundation-gap", priority:true,
+  test:function(a,d){ return d.foundation.pct < 60 && (d.desire.pct >= 60 || d.action.pct >= 60); },
+  h:"Read this one first — you want it, but your marriage isn’t ready yet.",
+  t:"This does not fix a relationship. It makes whatever is already there bigger. A strong marriage gets stronger. A shaky one gets shakier, and faster. Your answers say you want this a lot, but that the trust and the talking aren’t there yet. Sort that part out first. There is no way around it." },
+
+{ id:"fixing-it", priority:true,
+  test:function(a){ return a.q16 === 4; },
+  h:"You are hoping this will fix your sex life.",
+  t:"You said the sex with your husband is bad, and that this is why you want it. It almost never works that way — usually it makes the gap bigger. Talk to him about the sex first. That is a different conversation, and it comes before this one." },
+
+{ id:"already-happened", priority:true,
+  test:function(a,d){ return (a.q14 === 0 || a.q14 === 1) && d.foundation.pct < 70; },
+  h:"If it already happened and he doesn’t know, start there.",
+  t:"From the outside, this and cheating look exactly the same. The only difference is that he knew first and said yes. Everything else you might build depends on that being true." },
+
+{ id:"rules-avoidance",
+  test:function(a){ return a.q4 === 3 || a.q4 === 4; },
+  h:"You don’t like talking about rules — but you will have to.",
+  t:"You said that agreeing rules with other partners feels uncomfortable, or that you would avoid it. That conversation is the thing that keeps everyone safe. Practise it on small things first, long before it has to carry anything serious." },
+
+{ id:"no-condoms",
+  test:function(a){ return a.q19 === 1; },
+  h:"Thinking about no condoms? That is part of the thrill for a lot of couples.",
+  t:"The idea of nothing in the way is a big part of the fantasy for plenty of couples, and there is nothing strange about wanting that." },
+
+{ id:"willing-not-wanting",
+  test:function(a,d){ return d.action.pct >= 70 && d.desire.pct < 45; },
+  h:"You would do it — but do you actually want to?",
+  t:"Your answers say you are willing, but not that you really want it. Both are fine. Just be honest with yourself about which one it is. Saying yes to make someone else happy doesn’t last." }
+];
+
+/* ================================================================
+   ENGINE
+   ================================================================ */
+var $ = function(id){ return document.getElementById(id); };
+
+var state = { i:0, answers:{}, sent:false };
+
+var MAX = QUESTIONS.reduce(function(sum,q){
+  var best = 0;
+  q.options.forEach(function(o){ if(o.p !== null && o.p > best) best = o.p; });
+  return sum + best;
+}, 0);
+
+/* ---------- age gate ---------- */
+(function(){
+  var ok = false;
+  try { ok = localStorage.getItem("ageok") === "1"; } catch(e){}
+  if(ok) $("gate").classList.add("hidden");
+
+  $("gateYes").addEventListener("click", function(){
+    try { localStorage.setItem("ageok","1"); } catch(e){}
+    $("gate").classList.add("hidden");
+  });
+  $("gateNo").addEventListener("click", function(){
+    $("gate").classList.add("hidden");
+    $("gateExit").classList.remove("hidden");
+  });
+})();
+
+/* ---------- apply config to the page ---------- */
+(function(){
+  $("introTitle").textContent = CONFIG.storyTitle;
+  $("introEyebrow").textContent = CONFIG.eyebrow;
+  document.title = CONFIG.storyTitle + " — A Reader Quiz";
+  $("storyBtn").href = CONFIG.relatedUrl || CONFIG.wattpadUrl;
+  $("rawOut").textContent = "0 / " + MAX;
+  $("progLabel").textContent = "Question 1 of " + QUESTIONS.length;
+})();
+
+/* ---------- render one question ---------- */
+function render(){
+  var q = QUESTIONS[state.i];
+  var letters = "ABCDEF";
+
+  var html = '<div class="qnum">Question ' + (state.i + 1) + '</div>'
+           + '<h2 class="qtitle">' + q.title + '</h2>'
+           + '<div class="opts" role="radiogroup" aria-label="' + q.title.replace(/"/g,"&quot;") + '">';
+
+  q.options.forEach(function(o, idx){
+    var sel = state.answers[q.id] === idx ? " sel" : "";
+    var checked = state.answers[q.id] === idx ? "true" : "false";
+    html += '<button type="button" class="opt' + sel + '" role="radio" aria-checked="' + checked + '" data-idx="' + idx + '">'
+          +   '<span class="key" aria-hidden="true">' + letters[idx] + '</span>'
+          +   '<span>' + o.t + '</span>'
+          + '</button>';
+  });
+  html += '</div>';
+
+  var w = $("qwrap");
+  w.innerHTML = html;
+  w.classList.remove("fade");
+  void w.offsetWidth;          /* restart the animation */
+  w.classList.add("fade");
+
+  Array.prototype.forEach.call(w.querySelectorAll(".opt"), function(btn){
+    btn.addEventListener("click", function(){ choose(parseInt(btn.dataset.idx, 10)); });
+  });
+
+  /* progress */
+  var pct = Math.round((state.i / QUESTIONS.length) * 100);
+  $("bar").style.width = pct + "%";
+  $("progPct").textContent = pct + "%";
+  $("progLabel").textContent = "Question " + (state.i + 1) + " of " + QUESTIONS.length;
+  $("backBtn").style.visibility = state.i === 0 ? "hidden" : "visible";
+  $("navHint").textContent = state.i === QUESTIONS.length - 1
+    ? "Tap an answer to see your result"
+    : "Tap an answer to continue";
+
+  window.scrollTo({ top:0, behavior:"smooth" });
+}
+
+function choose(idx){
+  var q = QUESTIONS[state.i];
+  state.answers[q.id] = idx;
+
+  /* paint selection, then move on */
+  var opts = $("qwrap").querySelectorAll(".opt");
+  Array.prototype.forEach.call(opts, function(b, i){
+    b.classList.toggle("sel", i === idx);
+    b.setAttribute("aria-checked", i === idx ? "true" : "false");
+  });
+
+  setTimeout(function(){
+    if(state.i < QUESTIONS.length - 1){ state.i++; render(); }
+    else { finish(); }
+  }, 260);
+}
+
+/* question lookup by id */
+var QMAP = {};
+QUESTIONS.forEach(function(q){ QMAP[q.id] = q; });
+
+function pointsFor(qid){
+  var q = QMAP[qid];
+  var a = state.answers[qid];
+  if(!q || a === undefined) return 0;
+  var p = q.options[a].p;
+  return p === null ? 0 : p;
+}
+
+function tally(){
+  var total = 0;
+  QUESTIONS.forEach(function(q){
+    var a = state.answers[q.id];
+    if(a === undefined) return;
+    var p = q.options[a].p;
+    if(p !== null) total += p;
+  });
+  return total;
+}
+
+/* score each of the three dimensions */
+function scoreDimensions(){
+  var out = {};
+  DIMENSIONS.forEach(function(d){
+    var raw = d.qs.reduce(function(s, qid){ return s + pointsFor(qid); }, 0);
+    var pct = d.max ? Math.round((raw / d.max) * 100) : 0;
+    out[d.key] = { raw:raw, max:d.max, pct:pct, label:d.label };
+  });
+  return out;
+}
+
+/* assemble the action plan: priority flags, then the tier's sequence,
+   then any remaining flags. Capped so it stays readable. */
+function buildTips(tier, dims){
+  var a = state.answers;
+  var fired = FLAGS.filter(function(f){
+    try { return f.test(a, dims); } catch(e){ return false; }
+  });
+
+  var priority = fired.filter(function(f){ return f.priority; })
+                      .map(function(f){ return { h:f.h, t:f.t, priority:true }; });
+  var extra    = fired.filter(function(f){ return !f.priority; })
+                      .map(function(f){ return { h:f.h, t:f.t, priority:false }; });
+
+  return priority.concat(tier.tips).concat(extra).slice(0, 8);
+}
+
+function renderTips(tips){
+  var html = "";
+  tips.forEach(function(t){
+    html += '<li class="' + (t.priority ? "priority" : "") + '">'
+          +   '<strong>' + t.h + '</strong>' + t.t
+          + '</li>';
+  });
+  $("tips").innerHTML = html;
+}
+
+function finish(){
+  var score = tally();
+  var pct = MAX ? Math.round((score / MAX) * 100) : 0;
+
+  var tier = TIERS.find(function(t){ return pct >= t.min; }) || TIERS[TIERS.length - 1];
+  var dims = scoreDimensions();
+  var tips = buildTips(tier, dims);
+
+  $("quiz").classList.add("hidden");
+  var r = $("result");
+  r.classList.remove("hidden");
+  r.classList.add("fade");
+
+  $("tierName").textContent   = tier.name;
+  $("verdictLine").textContent = tier.verdict;
+  $("tierBody").innerHTML     = tier.body;
+  $("rawOut").textContent     = score + " / " + MAX;
+
+  renderTips(tips);
+
+  /* count the number up, and sweep the ring */
+  var C = 2 * Math.PI * 68;
+  $("ringFill").style.strokeDasharray  = C;
+  setTimeout(function(){ $("ringFill").style.strokeDashoffset = C * (1 - pct/100); }, 60);
+
+  var shown = 0;
+  var step = Math.max(1, Math.round(pct / 28));
+  var tick = setInterval(function(){
+    shown += step;
+    if(shown >= pct){ shown = pct; clearInterval(tick); }
+    $("pctOut").textContent = shown + "%";
+  }, 32);
+
+  submit(score, pct, dims, tier, tips);
+  window.scrollTo({ top:0, behavior:"smooth" });
+}
+
+/* ---------- send to Google Forms ---------- */
+function submit(score, pct, dims, tier, tips){
+  if(state.sent) return;
+
+  if(!CONFIG.formId){
+    $("saveNote").textContent = "Your answers were not sent anywhere — this quiz is running without data collection.";
+    return;
+  }
+  state.sent = true;
+
+  var f = document.createElement("form");
+  f.action = "https://docs.google.com/forms/d/e/" + CONFIG.formId + "/formResponse";
+  f.method = "POST";
+  f.target = "gfSink";
+  f.style.display = "none";
+
+  function add(id, value){
+    if(!id) return;
+    var input = document.createElement("input");
+    input.type = "hidden";
+    /* Google Forms expects "entry.123456789". The setup script logs the bare
+       number, so the prefix is added here — without it Google silently drops
+       every field and records a row containing nothing but a timestamp. */
+    input.name = String(id).indexOf("entry.") === 0 ? String(id) : "entry." + id;
+    input.value = value;
+    f.appendChild(input);
+  }
+
+  QUESTIONS.forEach(function(q){
+    var a = state.answers[q.id];
+    if(a === undefined) return;
+    add(CONFIG.entries[q.id], q.options[a].t);
+  });
+  add(CONFIG.entries.score,      String(score));
+  add(CONFIG.entries.percent,    String(pct));
+  add(CONFIG.entries.foundation, String(dims.foundation.pct));
+  add(CONFIG.entries.desire,     String(dims.desire.pct));
+  add(CONFIG.entries.action,     String(dims.action.pct));
+  add(CONFIG.entries.readiness,  tier.name);
+
+  /* the exact advice this reader was given, in the order they saw it.
+     "(!)" marks a warning that fired on their specific answers. */
+  add(CONFIG.entries.tips, (tips || []).map(function(t, i){
+    return (i + 1) + ". " + (t.priority ? "(!) " : "") + t.h;
+  }).join("  |  "));
+
+  document.body.appendChild(f);
+  try { f.submit(); } catch(e){}
+  setTimeout(function(){ f.remove(); }, 3000);
+
+  $("saveNote").textContent = "Your anonymous answers were added to the reader pool. Thank you.";
+}
+
+/* ---------- share ---------- */
+function share(){
+  /* never let readers share the placeholder URL */
+  var url = (CONFIG.wattpadUrl && CONFIG.wattpadUrl.indexOf("YOUR-STORY-ID") === -1)
+              ? CONFIG.wattpadUrl : CONFIG.relatedUrl;
+
+  var txt = CONFIG.shareText + " " + $("tierName").textContent
+          + " (" + $("pctOut").textContent + "). " + url;
+
+  if(navigator.share){
+    navigator.share({ title: CONFIG.storyTitle, text: txt }).catch(function(){});
+    return;
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){ toast("Result copied — paste it anywhere"); },
+                                            function(){ toast("Could not copy"); });
+    return;
+  }
+  toast("Copy this: " + txt);
+}
+
+function toast(msg){
+  var t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(function(){ t.classList.remove("show"); }, 2600);
+}
+
+/* ---------- wiring ---------- */
+$("startBtn").addEventListener("click", function(){
+  $("intro").classList.add("hidden");
+  $("quiz").classList.remove("hidden");
+  render();
+});
+
+$("backBtn").addEventListener("click", function(){
+  if(state.i > 0){ state.i--; render(); }
+});
+
+$("shareBtn").addEventListener("click", share);
+
+$("retakeBtn").addEventListener("click", function(){
+  state = { i:0, answers:{}, sent:false };
+  $("result").classList.add("hidden");
+  $("quiz").classList.remove("hidden");
+  $("ringFill").style.strokeDashoffset = 2 * Math.PI * 68;
+  $("pctOut").textContent = "0%";
+  $("tips").innerHTML = "";
+  render();
+});
+
+/* keyboard: A–F picks an answer, arrows navigate */
+document.addEventListener("keydown", function(e){
+  if($("quiz").classList.contains("hidden")) return;
+  var k = e.key.toUpperCase();
+  var idx = "ABCDEF".indexOf(k);
+  var n = QUESTIONS[state.i].options.length;
+  if(idx > -1 && idx < n){ choose(idx); return; }
+  if(e.key === "ArrowLeft" && state.i > 0){ state.i--; render(); }
+});
+</script>
+</body>
+</html>
