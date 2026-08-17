@@ -137,29 +137,6 @@ em{ color: var(--gold-soft); font-style: italic; }
   .btn-ghost:hover{ color: var(--cream); border-color: var(--muted); }
 }
 
-/* ---------- age gate ---------- */
-#gate{
-  position: fixed; inset: 0; z-index: 100;
-  background: var(--ink);
-  background-image: radial-gradient(50rem 34rem at 50% 0%, rgba(92,21,38,.6), transparent 65%);
-  display:flex; align-items:flex-start; justify-content:center;
-  padding: 1.25rem;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-/* margin:auto rather than align-items:center — a centred flex child taller
-   than the screen gets its top clipped with no way to scroll to it
-   (happens on a phone held sideways). */
-#gate .card{ max-width: 27rem; text-align:center; margin: auto; }
-.gate-actions{ display:grid; gap:.6rem; margin-top: 1.5rem; }
-
-.warn{
-  border-left: 2px solid var(--gold);
-  padding: .1rem 0 .1rem .9rem;
-  margin: 1.25rem 0;
-  text-align: left;
-}
-
 /* ---------- progress ---------- */
 .progress-head{
   display:flex; justify-content:space-between; align-items:baseline;
@@ -346,42 +323,6 @@ footer a{ color: var(--muted); }
 <body>
 
 <!-- ============================================================
-     AGE GATE
-     ============================================================ -->
-<div id="gate">
-  <div class="card">
-    <p class="eyebrow">Adults only</p>
-    <h2>This quiz is for readers 18 and over.</h2>
-
-    <div class="warn">
-      <p class="small" style="margin:0">
-        It contains explicit adult themes and asks frank questions about sex,
-        relationships and desire — including your own experiences.
-      </p>
-    </div>
-
-    <p class="small">
-      Your answers are anonymous. No name, no email, no login. Nothing that
-      identifies you is ever asked for or recorded.
-    </p>
-
-    <div class="gate-actions">
-      <button class="btn btn-primary btn-block" id="gateYes">I am 18 or older — enter</button>
-      <button class="btn btn-ghost btn-block" id="gateNo">I am under 18</button>
-    </div>
-  </div>
-</div>
-
-<div id="gateExit" class="hidden" style="position:fixed;inset:0;z-index:101;background:var(--ink);display:flex;align-items:center;justify-content:center;padding:1.25rem">
-  <div class="card" style="max-width:24rem;text-align:center">
-    <h2>Come back another time.</h2>
-    <p class="small" style="margin-top:1rem;margin-bottom:0">
-      This one is for adult readers only. Thank you for being honest.
-    </p>
-  </div>
-</div>
-
-<!-- ============================================================
      APP
      ============================================================ -->
 <main class="wrap" id="app" aria-live="polite">
@@ -407,6 +348,7 @@ footer a{ color: var(--muted); }
       <p class="small" style="margin-bottom:.75rem">
         <strong style="color:var(--cream)">Before you begin</strong>
       </p>
+      <p class="small" style="margin-bottom:.5rem">&#9656; <strong style="color:var(--gold-soft)">18+ only.</strong> Frank questions about sex, relationships and desire &mdash; including your own experiences.</p>
       <p class="small" style="margin-bottom:.5rem">&#9656; Completely anonymous. No name, no email, no account.</p>
       <p class="small" style="margin-bottom:.5rem">&#9656; Nothing is linked to you. I can read the answers, but never who gave them.</p>
       <p class="small" style="margin-bottom:0">&#9656; Answer honestly or answer as a fantasy. Both are welcome.</p>
@@ -839,22 +781,6 @@ var MAX = QUESTIONS.reduce(function(sum,q){
   q.options.forEach(function(o){ if(o.p !== null && o.p > best) best = o.p; });
   return sum + best;
 }, 0);
-
-/* ---------- age gate ---------- */
-(function(){
-  var ok = false;
-  try { ok = localStorage.getItem("ageok") === "1"; } catch(e){}
-  if(ok) $("gate").classList.add("hidden");
-
-  $("gateYes").addEventListener("click", function(){
-    try { localStorage.setItem("ageok","1"); } catch(e){}
-    $("gate").classList.add("hidden");
-  });
-  $("gateNo").addEventListener("click", function(){
-    $("gate").classList.add("hidden");
-    $("gateExit").classList.remove("hidden");
-  });
-})();
 
 /* ---------- apply config to the page ---------- */
 (function(){
